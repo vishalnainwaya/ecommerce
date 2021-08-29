@@ -1,0 +1,52 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+    <br>
+            <div class="grid_container">
+               
+                {% for list1 in listings %}
+                    <div>
+                        <div>
+                            <a href="{% url 'listingpage' list1.id %}"><img class="gridimg" src="{{ list1.image }}" alt="No Image"></a>
+                        </div> 
+                        <h4> <a href="{% url 'listingpage' list1.id %}"> {{ list1.item }}</a> </h4>
+                        {% if list1.bids.last.bidprice %}
+                            <h6 style="display: inline;">Current Price : </h6><p style="display: inline; color: green;">${{list1.bids.last.bidprice}}</p>
+                        {% else %}
+                            <h6 style="display: inline;">Current Price : </h6><p style="display: inline; color: green;">${{list1.price}}</p>
+                        {% endif %}
+                        
+                        <h6>Starting Price : ${{ list1.price }}</h6>
+                        <small> <li> Created on : {{ list1.timestart}} </li> </small>
+                        <h6 style="text-align: left; display: inline;">Description : </h6> {{list1.description}} 
+                    </div>
+                {% empty %}
+                    <h4 style="color: tomato;text-align: left;">No Active Listing</h4>
+                {% endfor %}
+            </div>
+        
+
+        <!--
+            {% for list1 in listings %}           
+
+             <div style="background-color:cornflowerblue ; width:400px; text-align: center;" class="listings-list">
+                <div> 
+                    <img style="max-height: 200px; max-width: 300px;" src="{{ list1.image }}" alt="No Image">
+                <div>
+                    <h4> <a href="{% url 'listingpage' list1.id %}"> {{ list1.item }}</a> </h4>
+                    <h6>Last Bid : </h6>
+                    Starting Price : ${{ list1.price }}
+                    <br>
+                    <small>
+                    <li> Created on : {{ list1.timestart}} </li> 
+                    </small>
+                </div>
+                </div>
+                                
+            </div>
+            <hr> 
+        {% endfor %}
+        -->
+    
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+    Category-{{category.title}}
+{% endblock %}
+
+{% block body %}
+    <h2>Active listing in {{category.title}}</h2>
+    <br>
+    <div class="grid_container">
+            {% for listing in listings %}
+            <div>
+                <div>
+                    <a href="{% url 'listingpage' listing.id %}"><img class="gridimg" src="{{listing.image}}" alt="no image"></a>
+                </div>
+                <a href="{% url 'listingpage' listing.id %}">{{listing.item}}</a><br>
+                {% if listing.bids.last.bidprice  %}
+                    Last bid : ${{listing.bids.last.bidprice}} by {{listing.bids.last.user}}  
+                {% else %}
+                    No bids PLaced
+                {% endif %} <br>
+                starting price : {{listing.price}} <br>
+                <small>
+                    created on : {{listing.timestart}}
+                    {% if listing.timeend %}
+                    <br> Ended at : {{listing.timeend}}
+                    {% endif %}
+                </small>
+            </div>
+        {% empty %}
+            <h4 style="color: tomato;text-align: left;">No Listing Available for this Category</h4>
+        {% endfor %}
+    </div>
+    
+
+{% endblock %}

@@ -1,0 +1,251 @@
+{% extends "auctions/layout.html" %}
+
+
+
+{% block title %}
+    Listpage
+{% endblock %}
+
+{% block body %}
+
+{% if message is 0 %}
+    <h3 style="color: red; text-align: center;"> **  Bid must be higher than Last bid TRY AGAIN  **</h3>
+{% elif message is 1 %}
+    <h3 style="color: green; text-align: center;">**  Bid placed SUCCESSFULLY  **</h3>
+{% elif message is 2 %}
+    <h3 style="color:red; text-align: center;">** Please sign in first **</h3>
+{% endif %}
+    {% if not listing.status %}
+        {% if not listing.bids.last.bidprice  %}
+            <div class="alert alert-danger" role="alert"> NOT sold</div>
+        {% else %}
+        <div class="alert alert-success" role="alert" >SOLD </div>
+        {% endif %}
+    {% endif %}
+    <!--
+        Main content division starts here
+    -->
+    <div class="wrapper">
+        <div class="div1">
+            <div style= "width: 100%;">
+                {% if listing.status %} 
+                    {% if creator %}
+                        <div class="statustagtrue" >Status : OPEN </div> 
+                    
+                        <div style="float: left; margin-left: 30px; width: fit-content;margin-bottom: 22px; ">
+                        
+                            <form  action="{% url 'mylisting' %}" method="POST">
+                                {% csrf_token %}
+                                <button type="submit" class="closebiddingbutton" name="closebid" value="{{listing.id}}" >Close Bidding </button>
+                            </form>
+                        
+                        </div>
+                    {% else %}
+                    <div class="statustagother">Status : OPEN</div>
+                    {% endif %}
+                    <br>
+                {% else %} 
+                    <div id="statustagfalse">Status : CLOSED </div>
+                     
+                {% endif %} 
+            </div>
+            <br>
+            <img style="max-height: 200px; max-width: 300px;" src="{{ listing.image }}" alt="no image">
+            <br> <br>
+              
+            <a id="category_button" href="{% url 'category_page' listing.category.id %}">Category : {{listing.category}}</a>
+        </div>
+        <div class="div2">
+            <h3>Item : {{ listing.item }}</h3>  
+            <small>Created by {{listing.creator}}</small> <br>
+            <small style="display: inline; margin-right: 20px;" > <strong>Started at : </strong> {{ listing.timestart }}  </small>
+            {% if listing.timeend %}
+                       <small> <strong>Ended at : </strong> {{listing.timeend }}</small> 
+            {% endif %}
+            <hr>
+            <div style="background-color:#f2f2f2; width: 100%; height: 72px;">
+                {% if listing.status %}
+                    <div style="float: left;  width:230px; padding: 10px; ">
+                        <strong > Starting Price : <p style="display: inline; color: orange; font-weight: 500;">${{ listing.price }}</p> </strong>
+                        <br>
+                        {% if listing.bids.last.bidprice  %}
+                            <h6 style="margin-top: 10px;"><strong>Last Price:</strong> <p style="display: inline; color: crimson; font-weight: 450;">${{ listing.bids.last.bidprice }}</p>  by {{ listing.bids.last.user }} </h6>
+                        {% endif %}
+                        
+                    </div>
+                    <div style="float: left;  padding-top: 2px; ">
+                        {% if user.is_authenticated %}
+                            <form action="{% url 'listingpage' listing.id %}" method="POST">
+                                {% csrf_token %}
+                                <strong >Place bid: $</strong> 
+                                <input type="number" name="bid" step="0.01" max="999999.99" min="0.01" name="price" required>
+                                <input style=" margin-top: 5px;"  type="submit" name="type" value="Bid" >
+                            </form>
+                        {% endif %}
+                        
+                    </div>
+                {% endif %}    
+
+                {% if not listing.status  %}
+                    <strong style="font-size: larger" >Starting Price : <p style="display: inline; color: red; font-weight: 450;">${{ listing.price }}</p> </strong>
+                {% endif %}
+                
+                {% if not listing.status %}
+                    
+                    {% if not listing.bids.last.bidprice  %}
+                        <br> <br> <div style="font-weight: bold; font-size: larger"> <p style="display: inline; color: red;">NO bids were placed</p>  </div>
+                    {% else %}
+                        {% if listing.bids.last.user.id == user.id %}
+                            
+                            <br> <br><div style="font-weight: bold; font-size: larger; color: #22BD16;">Congrats You Won this Auction </div>
+                        {% else %}
+                            <br> <br><div style="font-weight: bold; font-size: larger">Sold to {{ listing.bids.last.user }} for <p style=" display: inline; color: #22BD16;">${{ listing.bids.last.bidprice }}</p> on {{ listing.timeend }}</div>   
+                        {% endif %}
+                        
+                    {% endif %}
+                {% endif %}
+
+            </div>
+            
+            <hr>
+            {% if user.is_authenticated %}
+                <div style=" margin-left: 200px; margin-top: 1px;">
+                        
+                    <form  action="{% url 'watchlist_move' listing.id %}"> 
+                        {% csrf_token %}   
+                        {% if in_watchlist %}
+                            <button type="submit" class="watchlistbutton">Remove from watchlist</button>
+                        {% else %}
+                            <button type="submit" class="watchlistbutton">Add to watchlist</button>
+                        {% endif %}
+                    </form>
+                </div>
+            {% endif %}
+            
+            
+        </div>
+        <div class="div3">
+            <h4>Description</h4><hr>  
+            <p style=" max-width: 520px; max-height: fit-content; "> {{listing.description}}</p>
+        </div>
+    </div>
+    
+    <hr>
+    <div class="wrapper2">
+        <div style="width: 50%;float: left; background-color: #f2f2f2; min-height: 210px;">
+            <span style="text-align: center;"><h5>All Comments </h5></span>
+            {% if user.is_authenticated %}
+                {% if listing.status %}
+
+                    <form class="form-inline" action="{% url 'listingpage' listing.id %}" method="POST">
+                        {% csrf_token %}
+                        <textarea id="comment_textarea" name="content"  cols="10" rows="3" required class="form-control" placeholder="Write your comment . . . "></textarea>
+                        <input id="comment_button"  type="submit" name="type" value="Comment">
+                    </form>
+                    
+                {% endif %}
+            {% endif %}
+            <div style="text-align: left; margin-left: 7px;">
+                {% for comment in listing.comments.all %}
+                    {{comment.user}} commented : {{comment.content}} <br>
+                {% empty %}
+                <p style="text-align: center;">No Comments</p>
+                {% endfor %}
+            </div>
+            
+            
+        </div>
+        <div style="width: 49%;margin-left: 10px; float: left; background-color: #f2f2f2; min-height: 210px;">
+            
+            <span style="text-align: center;"><h5>Bid history</h5></span>
+            <ul style="text-align: left;">
+                {% for bid in  listing.bids.all %}
+                    <li>{{ bid.timestamp }} - ${{ bid.bidprice }} by {{ bid.user }}</li>
+                {% empty %}
+                    <p style="margin-left: 290px;">No Bidding</p> 
+                {% endfor %}
+            </ul>
+        </div>
+        
+    </div>
+    
+    <!--
+    <h2>Item : {{ listing.item }} </h2><br>
+    <img style="max-height: 200px; max-width: 300px;" src="{{ listing.image }}" alt="no image"><br>
+    <ul>
+        {% if listing.status %} 
+            <div class="statustagtrue" >Status : OPEN </div> 
+        {% else %} 
+            <div class="statustagfalse" >Status : CLOSED </div> 
+        {% endif %} <br>
+        <strong>Category : <a href="{% url 'category_page' listing.category.id %}">{{listing.category}}</a> </strong><br>
+        <strong> Starting Price : ${{ listing.price }}</strong>
+        <small><li> Started At: {{ listing.timestart }}  by : {{listing.creator}}</li></small>
+        {% if listing.timeend %}
+            <small><li>Ended at : {{listing.timeend }}</li></small>
+        {% endif %}
+    </ul>
+    <hr>
+    {% if listing.status %}
+        {% if user.is_authenticated %}
+            <form action="{% url 'listingpage' listing.id %}" method="POST">
+                {% csrf_token %}
+                <strong>Place bid: $</strong> 
+                <input type="number" name="bid" step="0.01" max="999999.99" min="0.01" name="price" required>
+                <input  type="submit" name="type" value="bid">
+            </form>
+        {% endif %}
+        {% if listing.bids.last.bidprice  %}
+            <h6><strong>Last Price:</strong>  ${{ listing.bids.last.bidprice }} by {{ listing.bids.last.user }} </h6>
+        {% endif %}
+    {% endif %}
+    <strong>Description : </strong> {{listing.description}}
+    
+    {% if user.is_authenticated %}
+        {% if listing.status %}
+        <hr>
+            <form action="{% url 'listingpage' listing.id %}" method="POST">
+                {% csrf_token %}
+                <label>Comment : </label>
+                <textarea name="content"  cols="10" rows="3" required class="form-control" placeholder="Write your comment"></textarea>
+                <input type="submit" name="type" value="comment">
+            </form>
+            <hr>
+        {% endif %}
+        
+
+        {% if listing.status %}
+            {% if creator %}
+                <form  action="{% url 'mylisting' %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="closebiddingbutton" name="closebid" value="{{listing.id}}" >Close Bidding </button>
+                </form>
+            {% endif %}
+
+            <form  action="{% url 'watchlist_move' listing.id %}"> 
+                {% csrf_token %}   
+                {% if in_watchlist %}
+                    <button type="submit" class="watchlistbutton">Remove from watchlist</button>
+                {% else %}
+                    <button type="submit" class="watchlistbutton">Add to watchlist</button>
+                {% endif %}
+            </form>    
+
+        {% endif %}
+    {% endif %}
+    <hr>
+    {% for comment in listing.comments.all %}
+        <p>{{comment.user}} commented : {{comment.content}}</p>
+    {% empty %}
+        no Comments
+    {% endfor %}
+    <hr>
+    <span style="text-align: center;"><h4>Bid history</h4></span>
+    <ul>
+        {% for bid in  listing.bids.all %}
+            <li>{{ bid.timestamp }} - ${{ bid.bidprice }} by {{ bid.user }}</li>
+        {% endfor %}
+    </ul>
+
+    -->
+{% endblock %}

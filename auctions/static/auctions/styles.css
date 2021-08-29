@@ -1,0 +1,180 @@
+body {
+    padding: 10px;
+        
+}
+
+.grid_container{
+    display: grid;
+    grid-template-columns: auto auto auto auto; 
+    padding: 10px; 
+    text-align: center;
+}
+.grid_container > div{
+    background-color:#f2f2f2 ;
+    /* border-style: solid;
+    border-width: 1px;*/
+    margin: 10px;
+    padding: 20px;
+    
+}
+
+.grid_container >div >div{
+    width: auto; height: 200px; background-color:#f2f2f2;
+}
+.grid_container_2{
+    display: grid;
+    grid-template-columns: auto auto auto auto; 
+    padding: 10px; 
+    text-align: center;
+}
+.grid_container_2 > div{
+    width: auto;
+    background-color:#f2f2f2 ;
+    
+    margin: 10px;
+    padding: 20px;
+    text-align: center;
+    
+}
+.grid_container_2 >div >div{
+    width: auto; height: 200px; background-color:#f2f2f2;
+}
+.gridimg{
+    margin-top: 10px;margin-bottom: 10px ; max-height: 180px; max-width: 250px;
+}
+
+.newlistingdiv{
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+    width: 600px;
+    margin: auto;
+    display: flex;
+    font-size: large;
+}
+
+td{
+    margin: auto;
+    padding: 10px;
+    width: 190px;
+    /* border-style: solid;
+    border-width: thin;
+    border-color: black; */
+}
+.listinginput{
+    padding: 5px;
+    border-radius: 5px;
+    border-width: thin;
+    width: 390px;    
+
+}
+.newlistingbutton{
+    background-color:#4CAF50;
+    padding:5px; 
+    width: 100%; 
+    margin-top: 10px; 
+    border-radius: 25px; 
+    border-width: thin; 
+    outline: none;  
+}
+
+.watchlistbutton{
+    border-radius: 5px;
+    padding: 5px;
+    border: none;
+    color: white;
+    background-color:gray ;
+}
+
+.statustagother{
+    border-radius: 5px;
+    background-color:#319f29 ;
+    color: white;
+    float: left;
+    margin-left: 160px;
+    padding: 5px;
+    width: fit-content;
+}
+
+.statustagtrue{
+    border-radius: 5px; background-color: #319f29; color: white; padding: 5px;   
+    float: left; margin-left: 95px; width:fit-content; 
+}
+
+#statustagfalse{
+    border-radius: 5px; background-color: #f23939; color: white; padding: 5px; margin-left: 158px; width: fit-content;
+    
+}
+
+.closebiddingbutton{
+    border-radius: 5px;
+    padding: 5px;
+    border: none;
+    color: white;
+    background-color:#F23939 ;
+       
+}
+
+.wrapper{
+    text-align: center;
+    margin: 0;
+    width: 100%;
+    height: 340px;
+    
+    
+}
+
+.wrapper2{
+    text-align: center;
+    margin: 0;
+    width: 100%;
+    background-color: black; color: black;
+    
+}
+
+.div1{
+    float: left;
+    background-color:#f2f2f2 ;
+    width: 29%;
+    margin-right: 10px;
+    padding: 10px;
+    height: 330px;
+    
+}
+
+.div2{
+    float: left;
+    width: 35%;
+    margin: 0;
+    padding: 10px;
+    background-color:#f2f2f2 ;
+    padding-left: 15px;
+    text-align: left;
+    height: 330px;
+}
+
+.div3{
+    float: left;
+    width: 34%;
+    margin-left: 10px;
+    padding: 10px;
+    background-color:#f2f2f2 ;
+    max-height: 330px;
+    height: 330px;
+    text-align: justify;
+    
+    
+}
+
+#comment_button{
+    margin-left: 5px; height: 40px; border-radius: 5px; border: none; padding-left: 10px;padding-right: 10px;
+    background-color: gray; color: white;
+}
+
+#comment_textarea{
+    width: 640px; margin-left: 7px; height: 40px;
+}
+
+#category_button{
+    background-color: steelblue; color: white; padding: 5px; border-radius: 5px; font-weight: 200; width: fit-content; 
+}
